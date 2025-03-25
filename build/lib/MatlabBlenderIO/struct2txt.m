@@ -4,10 +4,10 @@ if exist("times", "var"); historian = query_historian(historian, historian, time
 
 File = fopen(filename, 'w');
 fclose(File);
-path_elements = split(filename, ["/", "//", "\", "\\"]);
-path = replace(filename, path_elements(end),"");
-
-write_branches("rocket", historian);
+path_elements = split(filename, "\");
+path = replace(filename, "\"+path_elements(end),"");
+name = replace(path_elements(end), ".txt", "");
+write_branches(name, historian);
 
 
     function write_branches(trace, branches)
@@ -15,19 +15,30 @@ write_branches("rocket", historian);
         for branch_index = 1:numel(branch_names)
             branch_name = branch_names{branch_index};
 
-            if isequal(branch_name, "mesh"); copyfile(branches.(branch_name), path); end
+            
 
             writematrix(trace+"."+branch_name, filename, "delimiter", ",", 'WriteMode','append');
+            
+                                                is_mesh   = isequal(branch_name, "mesh");
+                                                is_parent = isequal(class(branches.(branch_name)), "struct");
+            try double(branches.(branch_name)); is_matrix = true; catch; is_matrix = false; end
+            try string(branches.(branch_name)); is_string = true; catch; is_string = false; end 
+            
 
-            if     isequal(class(branches.(branch_name)), "struct"); write_branches(trace+"."+branch_name, branches.(branch_name));
-            elseif isequal(class(branches.(branch_name)), "double"); writematrix(       branches.(branch_name) , filename, "delimiter", ",", 'WriteMode','append');
-            else; try                                                writematrix(string(branches.(branch_name)), filename, "Delimiter", ",", 'WriteMode','append');
-                  catch;                                             writematrix("MISSING",                      filename, "Delimiter", ",", 'Writemode','append');
-                  end
+                
+            if     is_parent; write_branches(trace+"."+branch_name, branches.(branch_name));
+            elseif is_mesh 
+                    mesh_fileparts = split(branches.(branch_name), "\");
+                    mesh_filepath  = path +"\"+ mesh_fileparts{end};                 
+                    copyfile(branches.(branch_name), mesh_filepath);
+                              writematrix(       mesh_filepath           , filename, "Delimiter", ",", 'WriteMode','append');    
+            elseif is_matrix; writematrix(double(branches.(branch_name)) , filename, "Delimiter", ",", 'WriteMode','append');
+            elseif is_string; writematrix(string(branches.(branch_name)) , filename, "Delimiter", ",", 'WriteMode','append');
+            else;             writematrix("MISSING",                       filename, "Delimiter", ",", 'Writemode','append');
             end
+            
+        end
         end
 
-
-    end
 
 end

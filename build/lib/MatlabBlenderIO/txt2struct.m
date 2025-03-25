@@ -2,8 +2,7 @@ function outstruct = txt2struct(filename)
 
 path_elements = split(filename, '\'); path = strrep(filename, path_elements(end), ''); name = strrep(path_elements(end), '.txt','');
 
-outstruct = struct();
-outstruct.is_body = true;
+outstruct = body();
 file_cell = readcell(filename, "Delimiter", ',');
 read_head = 1;
 max_head  = height(file_cell);

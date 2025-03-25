@@ -21,7 +21,7 @@ def txt2obj(filepath, *args, **kwargs):
         if is_address:
             address = data[row].split('.')
             
-            is_body = (address[-1] in tracked_properties)
+            is_body = not (address[-1] in tracked_properties)
 
             if is_body:
                 body_name    = address[-2]
@@ -83,11 +83,12 @@ def txt2obj(filepath, *args, **kwargs):
                 if is_attitude:
                     
                     number_of_frames = len(data[row+1].split(','))
+                    is_flattened = (number_of_frames != 3)
                     
                     bpy.context.view_layer.objects.active = bpy.data.objects[body_name]
                     bpy.context.object.rotation_mode = 'QUATERNION'
                     
-                    if number_of_frames > 1:
+                    if is_flattened:
                         
                         attitudes        = numpy.zeros((9,number_of_frames))
                         
@@ -142,15 +143,8 @@ def txt2obj(filepath, *args, **kwargs):
                     print(stl_filename)
                     print(txt_filename)
                     print(stl_filepath)
-                    # Testa att...
-                    # Printa stl_filename och se om den är null
-                    # Se vad som händer om ".stl" inte finns i stringen
                     import_name        = stl_filename.replace(".stl", "")
 
-                    # Min gissning är att felet ligger i linen nedan
-                    # Antagligen finns inte den filepathen
-                    # Verkar som din filepath är "Trallgok.stl"
-                    # Är detta rätt? Behövs inte typ "/mapp/gaksg/gaklsn/Trallgok.stl"?
                     bpy.ops.import_mesh.stl(filepath = stl_filepath)
                     
                     print(import_name)

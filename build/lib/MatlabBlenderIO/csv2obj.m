@@ -3,6 +3,9 @@ function outstruct = csv2obj(filename)
 outstruct = struct();
 outstruct.is_body = true;
 
+path = split(filename, "\")
+path = erase(filename, path{end})
+
 contents = fileread(filename);
 contents = erase(contents, sprintf('\n'));
 contents = erase(contents, sprintf('\r'));
@@ -18,7 +21,7 @@ is_parent = (numel(parts)==1);
 
 if numel(address)>1
 if      is_parent; outstruct = setfield(outstruct, address{2:end}, struct());
-elseif  is_mesh  ; outstruct = setfield(outstruct, address{2:end}, parts{2});
+elseif  is_mesh  ; outstruct = setfield(outstruct, address{2:end}, path+parts{2});
 else;   try        outstruct = setfield(outstruct, address{2:end}, csvtext2matrix(parts{2}));
         catch;     outstruct = setfield(outstruct, address{2:end}, "MISSING");
         end

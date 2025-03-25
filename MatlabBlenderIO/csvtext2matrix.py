@@ -80,4 +80,4 @@ def csvtext2matrix_demo():
 
 
 
-#csvtext2matrix_demo()
+csvtext2matrix_demo()

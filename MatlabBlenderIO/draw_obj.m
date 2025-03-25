@@ -1,6 +1,5 @@
-function draw_obj(ax, obj, path, varargin)
+function draw_obj(ax, obj)
 % Draws an object imported using csv2obj in a MATLAB axes specified by ax.
-if ~exist("path", "var"); path = "./"; end
 
 
 initial_plotstate = ax.NextPlot();
@@ -15,7 +14,7 @@ if isfield(obj, "position"); position = obj.position; else; position = [0;0;0]; 
 if isfield(obj, "attitude"); attitude = obj.attitude; else; attitude = eye(3) ; end
 
 if isfield(obj, "mesh")
-try mesh = evalin("base", filename2varname(obj.mesh)); catch; mesh = stlread(path+obj.mesh); assignin("base", filename2varname(obj.mesh), mesh); end
+try mesh = evalin("base", filename2varname(obj.mesh)); catch; mesh = stlread(obj.mesh); assignin("base", filename2varname(obj.mesh), mesh); end
 new_mesh = mesh;
 new_mesh_Points = accumulated_position' + (new_mesh.Points*(attitude') + position'  )*accumulated_attitude';
 new_mesh_tri    = triangulation(mesh.ConnectivityList, new_mesh_Points);

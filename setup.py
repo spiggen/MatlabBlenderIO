@@ -51,7 +51,7 @@ generate_init_files('MatlabBlenderIO')
 
 setup(
     name="MatlabBlenderIO",
-    version="0.0.5",  # Increment your version
+    version="0.0.6",  # Increment your version
     packages=find_packages(),  # Start looking in MatRocket/MatRocket/
     include_package_data=True,  # Important for non-Python files
     install_requires=[],

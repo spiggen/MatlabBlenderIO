@@ -7,7 +7,7 @@ This package includes functions for both Blender (python, see bpy API: https://d
 
 ![](./Documentation/lib/import_export.png)
 
-Demonstrations of the below code can be found under **Exaples/**
+Demonstrations of the below code can be found under **Examples/**
 
 ### Future work
 

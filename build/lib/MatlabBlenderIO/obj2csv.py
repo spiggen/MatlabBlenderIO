@@ -18,15 +18,15 @@ def obj2csv(filepath, obj, *args, **kwargs):
         attitude = obj.rotation_quaternion.to_matrix()
         attitude.transpose()
         attitude = np.array(attitude)
-        file.write(address+",,,,,\n")
-        file.write(address+".position,,,,\n")
-        file.write(mlb.matrix2csvtext(position)+",,,,,\n")
-        file.write(address+".attitude,,,,\n")
-        file.write(mlb.matrix2csvtext(attitude)+",,,,,\n")
+        file.write(address+",,,,,,\n")
+        file.write(address+".position,,,,,\n")
+        file.write(mlb.matrix2csvtext(position)+",,,,,,\n")
+        file.write(address+".attitude,,,,,\n")
+        file.write(mlb.matrix2csvtext(attitude)+",,,,,,\n")
 
         if obj.type == 'MESH':
-            file.write(address +'.mesh,,,,\n')
-            file.write(obj.name+'.stl,,,,,\n')
+            file.write(address +'.mesh,,,,,\n')
+            file.write(obj.name+'.stl,,,,,,\n')
             
             
             stl_filename       = obj.name+".stl"

@@ -11,13 +11,16 @@ def query_csv(filepath, inquiry):
     
     data = data.replace("\n", "")
     data = data.replace("\n", "")
-    data = data.split(",,,,,")
-    data = list(map(lambda element: element.split(",,,,"), data))
+    data = data.split(",,,,,,")
+    data = list(map(lambda element: element.split(",,,,,"), data))
     data = [list(filter(lambda item: item != '', element )) for element in data if type(element) is list]
     data = data[:-1]
 
     inquiry = data[0][0] + "." + inquiry
     full_inquiry = list(filter(lambda element: inquiry in element, data))
+    if len(full_inquiry) == 0:
+        print(inquiry)
+        raise ValueError('File does not contain query.')
     index = data.index(full_inquiry[0])
     try:
         return csvtext2matrix(data[index][1])

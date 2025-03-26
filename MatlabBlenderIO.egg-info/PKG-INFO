@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: MatlabBlenderIO
-Version: 0.0.5
+Version: 0.0.6
 Summary: A solution for transferring data in and out of Blender and MATLAB, for example for ODE-solvers etc.
 Home-page: https://github.com/spiggen/MatlabBlenderIO
 Author: Vilgot Lötberg
@@ -18,7 +18,7 @@ This package includes functions for both Blender (python, see bpy API: https://d
 
 ![](./Documentation/lib/import_export.png)
 
-Demonstrations of the below code can be found under **Exaples/**
+Demonstrations of the below code can be found under **Examples/**
 
 ### Future work
 
@@ -30,6 +30,10 @@ Not yet to be included, but which are on the list of things to implement:
  
 
 ## Contents
+
+### Installation
+* Manual installation
+* Access from MATLAB
 ### Syntax
 * csv2obj
 * obj2csv
@@ -40,6 +44,51 @@ Not yet to be included, but which are on the list of things to implement:
 ### General
 * csv-parsing
 
+
+# Installation
+
+An installation-script can be found in this repo's top level, ```installer.bat```. By downloading this and running it, the package should install automatically.
+
+## Manual installation
+
+Additionally, or of this doesn't work, installation can be done through pip in powershell or cmd:
+
+```powershell
+PS C:\Users\some_user\> pip install MatlabBlenderIO
+```
+This puts MatlabBlenderIO on a path that is reachable.
+
+**[NOTE]:** Blender runs on a seperate python-executable, and thus the package has to be installed there as well. It's usually located at ``` C:\Program Files\Blender Foundation\Blender 3.6\3.6\python\bin\python.exe ```, and the package can be installed there as well by:
+
+```powershell
+"C:\Program Files\Blender Foundation\Blender 3.6\3.6\python\bin\python.exe" -m pip install MatlabBlenderIO
+```
+
+If the Blender-python executable is not located there, it can be found by going into Blender>Scripting and typing:
+
+```python
+>>> import sys
+>>> sys.executable
+'C:\\Program Files\\Blender Foundation\\Blender 3.6\\3.6\\python\\bin\\python.exe'
+```
+
+If the resulting path is different, it should be used instead.
+
+
+### Access from MATLAB
+The library will not automatically end up on the MATLAB-path, but has to be added manually. To do this, add this to the start of your MATLAB script:
+
+```MATLAB
+%% Add MatlabBlenderIO to path:
+[library_failiure, library_status] = system("pip show MatlabBlenderIO");
+
+if library_failiure ;disp(library_status);error("Package not found."); end
+
+addpath(genpath(strip(extractBetween(string(library_status), "Location: ", "Requires:"))+"\MatlabBlenderIO"));
+
+```
+
+Until MATLAB adds a way to add the path to pip-packages via a single command, this is the way we'll have to do it.
 
 # syntax
 

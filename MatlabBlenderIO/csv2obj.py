@@ -14,8 +14,8 @@ def csv2obj(filepath, *args, **kwargs):
     
     data = data.replace("\n", "")
     data = data.replace("\n", "")
-    data = data.split(",,,,,")
-    data = list(map(lambda element: element.split(",,,,"), data))
+    data = data.split(",,,,,,")
+    data = list(map(lambda element: element.split(",,,,,"), data))
     data = [list(filter(lambda item: item != '', element )) for element in data if type(element) is list]
     data = data[:-1]
     
@@ -98,7 +98,7 @@ def csv2obj(filepath, *args, **kwargs):
                 if len(position_dimensions) > 2:
                     number_of_keyframes = positions.shape[2]
                     for keyframe in range(1,number_of_keyframes):
-                        position = mt.Vector(positions[keyframe])
+                        position = mt.Vector(positions[:,:,keyframe])
                         body.keyframe_insert('location', frame = keyframe)
                         body.location = position
                 else:
@@ -112,7 +112,7 @@ def csv2obj(filepath, *args, **kwargs):
                 if len(attitude_dimensions) > 2:
                     number_of_keyframes = attitudes.shape[2]
                     for keyframe in range(1,number_of_keyframes):
-                        attitude = attitudes[keyframe].invert()
+                        attitude = attitudes[:,:,keyframe]
                         attitude_quaternion = mt.Matrix(attitude).to_quaternion()
                         body.keyframe_insert('rotation_quaternion', frame = keyframe)
                         body.rotation_quaternion = attitude_quaternion

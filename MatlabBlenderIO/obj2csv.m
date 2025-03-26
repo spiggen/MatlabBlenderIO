@@ -20,14 +20,15 @@ function obj2csv(filename, obj)
             for branch_index = 1:numel(branch_names)
                 branch_name = branch_names{branch_index};
 
-                fprintf(File, ",,,,,\n");
+                fprintf(File, ",,,,,,\n");
                 fprintf(File,trace+"."+branch_name);
-                fprintf(File, ",,,,\n");
+                fprintf(File, ",,,,,\n");
 
                 is_meshpath = isequal(branch_name, "mesh");
-                try struct(branches.(branch_name)); is_parent = true; catch; is_parent = false; end
-                try double(branches.(branch_name)); is_matrix = true; catch; is_matrix = false; end
-                try string(branches.(branch_name)); is_string = true; catch; is_string = false; end
+                if      isequal(class(branches.(branch_name)), "struct"); is_parent = true; else;  is_parent = false; end
+                try if ~isnan(double(branches.(branch_name)));            is_matrix = true; else ; is_matrix = false; end 
+                                                                                            catch; is_matrix = false; end
+                try           string(branches.(branch_name) );            is_string = true; catch; is_string = false; end
 
 
                 if is_meshpath
@@ -41,7 +42,7 @@ function obj2csv(filename, obj)
                 if     is_parent;   write_branches(trace+"."+branch_name,                  branches.(branch_name) );
                 elseif is_meshpath; fwrite        (File,                                   mesh_filename          );
                 elseif is_matrix;   fprintf       (File,        matrix2csvtext(double(branches.(branch_name)),","));
-                elseif is_string;   fprintf       (File,      replace(  string(branches.(branch_name)), "\", "\\"));
+                elseif is_string;   fwrite        (File,                            string(branches.(branch_name)));
                 else;               fprintf       (File,                                                 "MISSING");
                 end
                 
